@@ -1,4 +1,5 @@
 import Sequelize from 'sequelize';
+import mysql2 from 'mysql2';
 import dbConfig from '../config/db.config.js';
 import userModel from './user.model.js';
 import roleModel from './role.model.js';
@@ -6,7 +7,7 @@ import roleModel from './role.model.js';
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST,
   dialect: dbConfig.dialect,
-  dialectModule: require('mysql2'),
+  dialectModule: mysql2,
   pool: dbConfig.pool,
   port: dbConfig.PORT,
 });
