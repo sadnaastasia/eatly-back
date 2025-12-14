@@ -6,6 +6,7 @@ import roleModel from './role.model.js';
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST,
   dialect: dbConfig.dialect,
+  dialectModule: require('mysql2'),
   pool: dbConfig.pool,
   port: dbConfig.PORT,
 });
