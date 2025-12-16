@@ -1,12 +1,12 @@
 import 'dotenv/config';
 
 export default {
-  HOST: process.env.APP_HOST,
-  USER: process.env.APP_USER,
-  PASSWORD: process.env.APP_PASSWORD,
-  DB: process.env.APP_DB,
-  PORT: process.env.APP_PORT,
-  dialect: process.env.APP_DIALECT,
+  HOST: process.env.DB_HOST,
+  USER: process.env.DB_USER,
+  PASSWORD: process.env.DB_PASSWORD,
+  DB: process.env.DB_DB,
+  PORT: process.env.DB_PORT,
+  dialect: process.env.DB_DIALECT,
   pool: {
     max: 5,
     min: 0,

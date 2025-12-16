@@ -8,7 +8,7 @@ import 'dotenv/config';
 const app = express();
 
 const corsOptions = {
-  origin: ['http://localhost:4200', 'https://eatly-seven.vercel.app/'],
+  origin: process.env.ORIGIN,
 };
 
 app.use(cors(corsOptions));
