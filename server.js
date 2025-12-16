@@ -15,6 +15,10 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.get('/', function (request, response) {
+  response.send('<h2>Welcome to eatly-app!</h2>');
+});
+
 app.use('/api/auth', authRoutes);
 app.use('/api/test', userRoutes);
 
