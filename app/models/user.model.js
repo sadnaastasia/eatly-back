@@ -3,13 +3,20 @@ export default (sequelize, Sequelize) => {
     username: {
       type: Sequelize.STRING,
       unique: true,
+      allowNull: false,
     },
     email: {
       type: Sequelize.STRING,
       unique: true,
+      allowNull: false,
     },
     password: {
       type: Sequelize.STRING,
+      allowNull: false,
+    },
+    refresh_token: {
+      type: Sequelize.STRING,
+      allowNull: true,
     },
   });
 

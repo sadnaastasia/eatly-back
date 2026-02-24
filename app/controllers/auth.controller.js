@@ -21,11 +21,7 @@ export const signup = async (req, res) => {
 
     await user.setRoles([userRole]);
 
-    const token = jwt.sign({ id: user.id }, authConfig.secret, {
-      expiresIn: process.env.AUTH_SECRET_EXPIRES_IN,
-    });
-
-    res.status(201).json({ accessToken: token });
+    res.status(201).json('Successful registration!');
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -53,14 +49,78 @@ export const signin = async (req, res) => {
       });
     }
 
-    const token = jwt.sign({ id: user.id }, authConfig.secret, {
-      expiresIn: process.env.AUTH_SECRET_EXPIRES_IN,
+    const accessToken = jwt.sign({ id: user.id }, authConfig.access_secret, {
+      expiresIn: authConfig.access_jwtExpiration,
+    });
+
+    const refreshToken = jwt.sign({ id: user.id }, authConfig.refresh_secret, {
+      expiresIn: authConfig.refresh_secret_jwtExpiration,
+    });
+
+    await User.update(
+      { refresh_token: refreshToken },
+      {
+        where: { id: user.id },
+        include: { model: Role, as: 'roles' },
+      },
+    );
+
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      path: '/',
     });
 
     res.status(200).json({
-      accessToken: token,
+      accessToken: accessToken,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
+};
+
+export const refresh = async (req, res) => {
+  const token = req.cookies.refreshToken;
+  if (!token) return res.sendStatus(401);
+
+  try {
+    const decoded = jwt.verify(token, authConfig.refresh_secret);
+
+    const user = await User.findOne({
+      where: { id: decoded.id },
+      include: { model: Role, as: 'roles' },
+    });
+
+    if (!user) return res.sendStatus(403);
+
+    const accessToken = jwt.sign({ id: user.id }, authConfig.access_secret, {
+      expiresIn: authConfig.access_jwtExpiration,
+    });
+
+    res.json({ accessToken });
+  } catch (err) {
+    return res.sendStatus(403);
+  }
+};
+
+export const logout = async (req, res) => {
+  const token = req.cookies.refreshToken;
+  if (!token) return res.sendStatus(204);
+
+  try {
+    const decoded = jwt.verify(token, authConfig.refresh_secret);
+
+    await User.update(
+      { refresh_token: null },
+      {
+        where: { id: decoded.id },
+        include: { model: Role, as: 'roles' },
+      },
+    );
+  } catch {}
+
+  res.clearCookie('refreshToken');
+  res.json({ message: 'Logged out' });
 };

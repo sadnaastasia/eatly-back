@@ -1,6 +1,8 @@
 import 'dotenv/config';
 
 export default {
-  secret: process.env.AUTH_SECRET,
-  jwtExpiration: process.env.AUTH_SECRET_EXPIRES_IN,
+  access_secret: process.env.ACCESS_SECRET,
+  access_jwtExpiration: process.env.ACCESS_SECRET_EXPIRES_IN,
+  refresh_secret: process.env.REFRESH_SECRET,
+  refresh_secret_jwtExpiration: process.env.REFRESH_SECRET_EXPIRES_IN,
 };
