@@ -9,7 +9,7 @@ import cookieParser from 'cookie-parser';
 const app = express();
 
 const corsOptions = {
-  origin: 'http://localhost:8081',
+  origin: process.env.ORIGIN,
 };
 
 app.use(cors(corsOptions));
