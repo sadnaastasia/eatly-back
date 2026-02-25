@@ -10,12 +10,14 @@ const app = express();
 
 const corsOptions = {
   origin: process.env.ORIGIN,
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.disable('x-powered-by');
 
 app.get('/', function (request, response) {
   response.send('<h2>Welcome to eatly-app!</h2>');
