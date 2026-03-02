@@ -3,6 +3,7 @@ import mysql2 from 'mysql2';
 import dbConfig from '../config/db.config.js';
 import userModel from './user.model.js';
 import roleModel from './role.model.js';
+import dishModel from './dish.model.js';
 
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST,
@@ -19,6 +20,7 @@ db.sequelize = sequelize;
 
 db.user = userModel(sequelize, Sequelize);
 db.role = roleModel(sequelize, Sequelize);
+db.dish = dishModel(sequelize, Sequelize);
 
 db.role.belongsToMany(db.user, {
   through: 'user_roles',
