@@ -5,9 +5,7 @@ const { dish: Dish } = db;
 export const getAllDishes = async (req, res) => {
   try {
     const allDishes = await Dish.findAll();
-    res.status(200).json({
-      allDishes: allDishes,
-    });
+    res.status(200).json(allDishes);
   } catch {
     res.status(500).json({ message: error.message });
   }

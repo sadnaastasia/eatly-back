@@ -30,14 +30,14 @@ app.use('/api/menu', menuRoutes);
 
 const PORT = process.env.PORT;
 
-// const Role = db.role;
+const Role = db.role;
 const Dish = db.dish;
 
 db.sequelize
-  .sync({ force: false })
-  // .sync({ alter: true })
+  // .sync({ force: false })
+  .sync({ alter: true })
   .then(() => {
-    // initial();
+    initial();
     console.log('Database synchronized');
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}.`);
@@ -47,38 +47,21 @@ db.sequelize
     console.error('Unable to connect to the database:', err);
   });
 
-// function initial() {
-//   Role.create({
-//     id: 1,
-//     name: 'user',
-//   });
-
-//   Role.create({
-//     id: 2,
-//     name: 'moderator',
-//   });
-
-//   Role.create({
-//     id: 3,
-//     name: 'admin',
-//   });
-// }
-
 function initial() {
-  // Role.create({
-  //   id: 1,
-  //   name: 'user',
-  // });
+  Role.create({
+    id: 1,
+    name: 'user',
+  });
 
-  // Role.create({
-  //   id: 2,
-  //   name: 'moderator',
-  // });
+  Role.create({
+    id: 2,
+    name: 'moderator',
+  });
 
-  // Role.create({
-  //   id: 3,
-  //   name: 'admin',
-  // });
+  Role.create({
+    id: 3,
+    name: 'admin',
+  });
 
   Dish.create({
     name: 'The Chicken King',
