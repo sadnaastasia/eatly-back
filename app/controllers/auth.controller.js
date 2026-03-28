@@ -6,6 +6,7 @@ import authConfig from '../config/auth.config.js';
 const { user: User, role: Role } = db;
 
 export const signup = async (req, res) => {
+  console.log('BODY:', req.body);
   try {
     const { username, email, password } = req.body;
 
@@ -37,7 +38,7 @@ export const signin = async (req, res) => {
     });
 
     if (!user) {
-      return res.status(404).json({ message: 'User Not found.' });
+      return res.status(404).json({ message: 'User is not found.' });
     }
 
     const passwordIsValid = await bcrypt.compare(password, user.password);
