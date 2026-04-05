@@ -54,20 +54,20 @@ db.sequelize
   });
 
 function initial() {
-  // Role.create({
-  //   id: 1,
-  //   name: 'user',
-  // });
+  Role.create({
+    id: 1,
+    name: 'user',
+  });
 
-  // Role.create({
-  //   id: 2,
-  //   name: 'moderator',
-  // });
+  Role.create({
+    id: 2,
+    name: 'moderator',
+  });
 
-  // Role.create({
-  //   id: 3,
-  //   name: 'admin',
-  // });
+  Role.create({
+    id: 3,
+    name: 'admin',
+  });
 
   Dish.create({
     name: 'The Chicken King',
