@@ -6,6 +6,7 @@ import db from './app/models/index.js';
 import authRoutes from './app/routes/auth.routes.js';
 import userRoutes from './app/routes/user.routes.js';
 import menuRoutes from './app/routes/menu.routes.js';
+import cartRoutes from './app/routes/cart.routes.js';
 import 'dotenv/config';
 import cookieParser from 'cookie-parser';
 
@@ -33,6 +34,7 @@ app.get('/', function (request, response) {
 app.use('/api/auth', authRoutes);
 app.use('/api/test', userRoutes);
 app.use('/api/menu', menuRoutes);
+app.use('/api/cart', cartRoutes);
 
 const PORT = process.env.PORT;
 

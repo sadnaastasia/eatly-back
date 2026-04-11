@@ -5,11 +5,20 @@ export default (sequelize, Sequelize) => {
       primaryKey: true,
       autoIncrement: true,
     },
-    guestId: {
-      type: Sequelize.STRING,
+
+    cartId: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
     },
+
+    dishId: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+    },
+
     quantity: {
       type: Sequelize.INTEGER,
+      allowNull: false,
       defaultValue: 1,
     },
   });
