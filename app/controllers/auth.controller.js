@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import authConfig from '../config/auth.config.js';
 
-const { user: User, role: Role } = db;
+const { user: User, role: Role, cart: Cart } = db;
 
 export const signup = async (req, res) => {
   console.log('BODY:', req.body);
@@ -36,6 +36,9 @@ export const signin = async (req, res) => {
       where: { username },
       include: { model: Role, as: 'roles' },
     });
+
+    const guestId = req.headers['x-guest-id'];
+    await Cart.update({ userId: user.id }, { where: { guestId } });
 
     if (!user) {
       return res.status(404).json({ message: 'User is not found.' });
