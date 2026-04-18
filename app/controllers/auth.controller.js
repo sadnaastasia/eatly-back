@@ -37,7 +37,7 @@ export const signin = async (req, res) => {
       include: { model: Role, as: 'roles' },
     });
 
-    await mergeCarts(req, res, user.id);
+    // await mergeCarts(req, res, user.id);
 
     if (!user) {
       return res.status(404).json({ message: 'User is not found.' });
@@ -70,7 +70,7 @@ export const signin = async (req, res) => {
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      secure: true,
+      secure: false,
       sameSite: 'none',
       maxAge: 7 * 24 * 60 * 60 * 1000,
       path: '/',
@@ -187,50 +187,50 @@ export const resetPassword = async (req, res) => {
   res.json({ message: 'Password updated successfully' });
 };
 
-async function mergeCarts(req, res, userId) {
-  const guestId = req.cookies?.guestId;
+// async function mergeCarts(req, res, userId) {
+//   const guestId = req.cookies?.guestId;
 
-  if (!guestId) return;
+//   if (!guestId) return;
 
-  const guestCart = await Cart.findOne({ where: { guestId } });
-  if (!guestCart) return;
+//   const guestCart = await Cart.findOne({ where: { guestId } });
+//   if (!guestCart) return;
 
-  const userCart = await Cart.findOne({ where: { userId } });
+//   const userCart = await Cart.findOne({ where: { userId } });
 
-  if (!userCart) {
-    guestCart.userId = userId;
-    guestCart.guestId = null;
+//   if (!userCart) {
+//     guestCart.userId = userId;
+//     guestCart.guestId = null;
 
-    await guestCart.save();
-    res.clearCookie('guestId');
-    return;
-  }
+//     await guestCart.save();
+//     res.clearCookie('guestId');
+//     return;
+//   }
 
-  const guestCartItems = await CartItem.findAll({
-    where: { cartId: guestCart.id },
-  });
+//   const guestCartItems = await CartItem.findAll({
+//     where: { cartId: guestCart.id },
+//   });
 
-  const userCartItems = await CartItem.findAll({
-    where: { cartId: userCart.id },
-  });
+//   const userCartItems = await CartItem.findAll({
+//     where: { cartId: userCart.id },
+//   });
 
-  for (const guestItem of guestCartItems) {
-    const existing = userCartItems.find(
-      (item) => item.dishId === guestItem.dishId,
-    );
+//   for (const guestItem of guestCartItems) {
+//     const existing = userCartItems.find(
+//       (item) => item.dishId === guestItem.dishId,
+//     );
 
-    if (existing) {
-      existing.quantity += guestItem.quantity;
-      await existing.save();
-    } else {
-      await CartItem.create({
-        cartId: userCart.id,
-        dishId: guestItem.dishId,
-        quantity: guestItem.quantity,
-      });
-    }
-  }
-  await Promise.all(guestCartItems.map((item) => item.destroy()));
-  await guestCart.destroy();
-  res.clearCookie('guestId');
-}
+//     if (existing) {
+//       existing.quantity += guestItem.quantity;
+//       await existing.save();
+//     } else {
+//       await CartItem.create({
+//         cartId: userCart.id,
+//         dishId: guestItem.dishId,
+//         quantity: guestItem.quantity,
+//       });
+//     }
+//   }
+//   await Promise.all(guestCartItems.map((item) => item.destroy()));
+//   await guestCart.destroy();
+//   res.clearCookie('guestId');
+// }

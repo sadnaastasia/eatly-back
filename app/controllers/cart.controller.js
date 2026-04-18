@@ -27,7 +27,7 @@ export const getCart = async (req, res) => {
 
         res.cookie('guestId', guestId, {
           httpOnly: true,
-          secure: true,
+          secure: false,
           sameSite: 'none',
           maxAge: 1000 * 60 * 60 * 24 * 7,
           path: '/',
@@ -77,7 +77,7 @@ export const addToCart = async (req, res) => {
 
         res.cookie('guestId', guestId, {
           httpOnly: true,
-          secure: true,
+          secure: false,
           sameSite: 'none',
           maxAge: 1000 * 60 * 60 * 24 * 7,
           path: '/',
@@ -129,7 +129,7 @@ export const deleteFromCart = async (req, res) => {
 
         res.cookie('guestId', guestId, {
           httpOnly: true,
-          secure: true,
+          secure: false,
           sameSite: 'none',
           maxAge: 1000 * 60 * 60 * 24 * 7,
           path: '/',
@@ -151,5 +151,67 @@ export const deleteFromCart = async (req, res) => {
     res.status(200).json('Dish deleted successfully!');
   } catch {
     res.status(500).json({ message: error.message });
+  }
+};
+
+export const mergeCarts = async (req, res) => {
+  try {
+    const guestId = req.cookies?.guestId;
+
+    if (!guestId) return;
+
+    const guestCart = await Cart.findOne({ where: { guestId } });
+    if (!guestCart) return;
+
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    const decoded = jwt.verify(token, authConfig.access_secret);
+    const userId = decoded.id;
+
+    const userCart = await Cart.findOne({ where: { userId } });
+
+    if (!userCart) {
+      guestCart.userId = userId;
+      guestCart.guestId = null;
+
+      await guestCart.save();
+      res.clearCookie('guestId');
+      return res
+        .status(200)
+        .json({ message: 'Guest cart successfully merged.' });
+    }
+
+    const guestCartItems = await CartItem.findAll({
+      where: { cartId: guestCart.id },
+    });
+
+    const userCartItems = await CartItem.findAll({
+      where: { cartId: userCart.id },
+    });
+
+    for (const guestItem of guestCartItems) {
+      const existing = userCartItems.find(
+        (item) => item.dishId === guestItem.dishId,
+      );
+
+      if (existing) {
+        existing.quantity += guestItem.quantity;
+        await existing.save();
+      } else {
+        await CartItem.create({
+          cartId: userCart.id,
+          dishId: guestItem.dishId,
+          quantity: guestItem.quantity,
+        });
+      }
+    }
+    await Promise.all(guestCartItems.map((item) => item.destroy()));
+    await guestCart.destroy();
+    res.clearCookie('guestId');
+    return res.status(200).json({ message: 'Guest cart successfully merged.' });
+  } catch {
+    return res
+      .status(500)
+      .json({ message: 'Something went wrong while merging carts.' });
   }
 };

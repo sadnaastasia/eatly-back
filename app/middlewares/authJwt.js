@@ -5,14 +5,15 @@ import authConfig from '../config/auth.config.js';
 const { user: User, role: Role } = db;
 
 export const verifyToken = async (req, res, next) => {
-  const token = req.headers['x-access-token'] || req.headers['authorization'];
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
 
   if (!token) {
     return res.status(403).json({ message: 'No token provided!' });
   }
 
   try {
-    const decoded = jwt.verify(token.replace('Bearer ', ''), authConfig.secret);
+    const decoded = jwt.verify(token, authConfig.access_secret);
     req.userId = decoded.id;
 
     const user = await User.findByPk(req.userId);
@@ -66,7 +67,7 @@ export const isModeratorOrAdmin = async (req, res, next) => {
     const roles = await user.getRoles();
 
     const hasRole = roles.some((role) =>
-      ['admin', 'moderator'].includes(role.name)
+      ['admin', 'moderator'].includes(role.name),
     );
     if (hasRole) {
       next();
