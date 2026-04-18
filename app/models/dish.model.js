@@ -23,7 +23,7 @@ export default (sequelize, Sequelize) => {
       allowNull: false,
     },
     price: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.DECIMAL(10, 2),
       allowNull: false,
     },
     cooking_time: {
@@ -31,7 +31,7 @@ export default (sequelize, Sequelize) => {
       allowNull: false,
     },
     rating: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.DECIMAL(10, 1),
       allowNull: false,
     },
   });

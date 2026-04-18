@@ -5,6 +5,8 @@ import {
   signin,
   refresh,
   logout,
+  forgotPassword,
+  resetPassword,
 } from '../controllers/auth.controller.js';
 import {
   checkDuplicateEmail,
@@ -54,5 +56,8 @@ router.post('/signin', signin);
 router.post('/refresh', refresh);
 
 router.post('/logout', logout);
+
+router.post('/forgot-password', forgotPassword);
+router.post('/reset-password', resetPassword);
 
 export default router;

@@ -1,12 +1,14 @@
 import db from '../models/index.js';
 import jwt from 'jsonwebtoken';
 import authConfig from '../config/auth.config.js';
+import crypto from 'crypto';
 
 const { cartItem: CartItem, cart: Cart } = db;
 
 export const getCart = async (req, res) => {
   try {
-    const token = req.cookies.accessToken;
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
     if (token) {
       const decoded = jwt.verify(token, authConfig.access_secret);
       let cart = await Cart.findOne({ where: { userId: decoded.id } });
@@ -18,7 +20,19 @@ export const getCart = async (req, res) => {
       });
       res.status(200).json(cartItems);
     } else {
-      const guestId = req.headers['x-guest-id'];
+      let guestId = req.cookies?.guestId;
+
+      if (!guestId) {
+        guestId = crypto.randomUUID();
+
+        res.cookie('guestId', guestId, {
+          httpOnly: true,
+          secure: true,
+          sameSite: 'none',
+          maxAge: 1000 * 60 * 60 * 24 * 7,
+          path: '/',
+        });
+      }
       let cart = await Cart.findOne({ where: { guestId } });
       if (!cart) {
         cart = await Cart.create({ guestId });
@@ -35,7 +49,8 @@ export const getCart = async (req, res) => {
 
 export const addToCart = async (req, res) => {
   try {
-    const token = req.cookies.accessToken;
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
     const { dishId } = req.body;
     if (token) {
       const decoded = jwt.verify(token, authConfig.access_secret);
@@ -55,7 +70,19 @@ export const addToCart = async (req, res) => {
         });
       }
     } else {
-      const guestId = req.headers['x-guest-id'];
+      let guestId = req.cookies?.guestId;
+
+      if (!guestId) {
+        guestId = crypto.randomUUID();
+
+        res.cookie('guestId', guestId, {
+          httpOnly: true,
+          secure: true,
+          sameSite: 'none',
+          maxAge: 1000 * 60 * 60 * 24 * 7,
+          path: '/',
+        });
+      }
       let cart = await Cart.findOne({ where: { guestId } });
       if (!cart) {
         cart = await Cart.create({ guestId });
@@ -80,7 +107,8 @@ export const addToCart = async (req, res) => {
 
 export const deleteFromCart = async (req, res) => {
   try {
-    const token = req.cookies.accessToken;
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
     const { dishId } = req.body;
     if (token) {
       const decoded = jwt.verify(token, authConfig.access_secret);
@@ -94,8 +122,23 @@ export const deleteFromCart = async (req, res) => {
         await cartItem.destroy();
       }
     } else {
-      const guestId = req.headers['x-guest-id'];
-      const cart = await Cart.findOne({ where: { guestId } });
+      let guestId = req.cookies?.guestId;
+
+      if (!guestId) {
+        guestId = crypto.randomUUID();
+
+        res.cookie('guestId', guestId, {
+          httpOnly: true,
+          secure: true,
+          sameSite: 'none',
+          maxAge: 1000 * 60 * 60 * 24 * 7,
+          path: '/',
+        });
+      }
+      let cart = await Cart.findOne({ where: { guestId } });
+      if (!cart) {
+        cart = await Cart.create({ guestId });
+      }
       const cartItem = await CartItem.findOne({
         where: { cartId: cart.id, dishId },
       });

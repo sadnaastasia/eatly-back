@@ -23,6 +23,14 @@ export default (sequelize, Sequelize) => {
       type: Sequelize.STRING,
       allowNull: true,
     },
+    reset_token: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    reset_token_expire: {
+      type: Sequelize.DATE,
+      allowNull: true,
+    },
   });
 
   return User;

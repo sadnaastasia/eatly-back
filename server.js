@@ -44,6 +44,7 @@ const Dish = db.dish;
 db.sequelize
   .sync({ force: false })
   // .sync({ alter: true })
+
   .then(() => {
     // initial();
     console.log('Database synchronized');
@@ -73,7 +74,7 @@ function initial() {
 
   Dish.create({
     name: 'The Chicken King',
-    picture: 'http://localhost:8080/media/thechickenking.svg',
+    picture: 'https://eatly-back.vercel.app/media/thechickenking.svg',
     label: 'Trending',
     description:
       'The Chicken King is a bold, flavor-packed masterpiece made for true chicken lovers. A juicy, tender chicken fillet—crispy on the outside and succulent on the inside—is crowned with fresh, crunchy lettuce, ripe tomatoes, and melted cheese, all embraced by a soft, toasted bun. Finished with a signature house sauce that blends creamy, smoky, and slightly tangy notes, every bite delivers the perfect balance of crunch, heat, and richness. Big on taste. Big on satisfaction.',
@@ -84,7 +85,7 @@ function initial() {
 
   Dish.create({
     name: 'Chicken Hell',
-    picture: 'http://localhost:8080/media/chickenhell.svg',
+    picture: 'https://eatly-back.vercel.app/media/chickenhell.svg',
     label: 'Healthy',
     description:
       'Tender chicken pieces tossed in a blazing hot chili sauce with garlic, smoked paprika, and crushed red peppers. Finished with fresh herbs and a fiery glaze that delivers intense heat with every bite. Not for the faint-hearted.',
@@ -95,7 +96,7 @@ function initial() {
 
   Dish.create({
     name: 'Swe Dish',
-    picture: 'http://localhost:8080/media/swedish.svg',
+    picture: 'https://eatly-back.vercel.app/media/swedish.svg',
     label: 'Trending',
     description:
       'A delightful blend of tender ingredients glazed in a rich, sweet sauce with hints of honey and caramelized spices. Perfectly balanced flavors that create a comforting and satisfying experience in every bite.',
@@ -106,7 +107,7 @@ function initial() {
 
   Dish.create({
     name: 'Fish Fresh',
-    picture: 'http://localhost:8080/media/fishfresh.svg',
+    picture: 'https://eatly-back.vercel.app/media/fishfresh.svg',
     label: 'Supreme',
     description:
       'Tender, flaky fish cooked to perfection and finished with a splash of citrus and a drizzle of olive oil. Pure freshness, beautifully balanced.',
