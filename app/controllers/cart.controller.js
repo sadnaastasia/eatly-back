@@ -158,10 +158,14 @@ export const mergeCarts = async (req, res) => {
   try {
     const guestId = req.cookies?.guestId;
 
-    if (!guestId) return;
+    if (!guestId) {
+      return res.status(200).json({ message: 'No guest cart to merge.' });
+    }
 
     const guestCart = await Cart.findOne({ where: { guestId } });
-    if (!guestCart) return;
+    if (!guestCart) {
+      return res.status(200).json({ message: 'No guest cart found to merge.' });
+    }
 
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
