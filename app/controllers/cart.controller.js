@@ -27,7 +27,7 @@ export const getCart = async (req, res) => {
 
         res.cookie('guestId', guestId, {
           httpOnly: true,
-          secure: false,
+          secure: true,
           sameSite: 'none',
           maxAge: 1000 * 60 * 60 * 24 * 7,
           path: '/',
@@ -77,7 +77,7 @@ export const addToCart = async (req, res) => {
 
         res.cookie('guestId', guestId, {
           httpOnly: true,
-          secure: false,
+          secure: true,
           sameSite: 'none',
           maxAge: 1000 * 60 * 60 * 24 * 7,
           path: '/',
@@ -129,7 +129,7 @@ export const deleteFromCart = async (req, res) => {
 
         res.cookie('guestId', guestId, {
           httpOnly: true,
-          secure: false,
+          secure: true,
           sameSite: 'none',
           maxAge: 1000 * 60 * 60 * 24 * 7,
           path: '/',

@@ -70,7 +70,7 @@ export const signin = async (req, res) => {
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      secure: false,
+      secure: true,
       sameSite: 'none',
       maxAge: 7 * 24 * 60 * 60 * 1000,
       path: '/',
@@ -142,7 +142,7 @@ export const forgotPassword = async (req, res) => {
   const transporter = nodemailer.createTransport({
     host: 'smtp.mail.ru',
     port: 465,
-    secure: false,
+    secure: true,
     auth: {
       user: authConfig.email,
       pass: authConfig.email_password,

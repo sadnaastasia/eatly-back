@@ -73,6 +73,7 @@ function initial() {
   });
 
   Dish.create({
+    id: 1,
     name: 'The Chicken King',
     picture: 'https://eatly-back.vercel.app/media/thechickenking.svg',
     label: 'Trending',
@@ -84,6 +85,7 @@ function initial() {
   });
 
   Dish.create({
+    id: 2,
     name: 'Chicken Hell',
     picture: 'https://eatly-back.vercel.app/media/chickenhell.svg',
     label: 'Healthy',
@@ -95,6 +97,7 @@ function initial() {
   });
 
   Dish.create({
+    id: 3,
     name: 'Swe Dish',
     picture: 'https://eatly-back.vercel.app/media/swedish.svg',
     label: 'Trending',
@@ -106,6 +109,7 @@ function initial() {
   });
 
   Dish.create({
+    id: 4,
     name: 'Fish Fresh',
     picture: 'https://eatly-back.vercel.app/media/fishfresh.svg',
     label: 'Supreme',
