@@ -5,7 +5,7 @@ import {
   signin,
   refresh,
   logout,
-  forgotPassword,
+  forgetPassword,
   resetPassword,
 } from '../controllers/auth.controller.js';
 import {
@@ -57,7 +57,8 @@ router.post('/refresh', refresh);
 
 router.post('/logout', logout);
 
-router.post('/forgot-password', forgotPassword);
+router.post('/forget-password', forgetPassword);
+
 router.post('/reset-password', resetPassword);
 
 export default router;
