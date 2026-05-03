@@ -42,8 +42,8 @@ const Role = db.role;
 const Dish = db.dish;
 
 db.sequelize
+
   .sync({ force: false })
-  // .sync({ alter: true })
 
   .then(() => {
     // initial();

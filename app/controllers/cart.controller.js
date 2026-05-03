@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import authConfig from '../config/auth.config.js';
 import crypto from 'crypto';
 
-const { cartItem: CartItem, cart: Cart } = db;
+const { cartItem: CartItem, cart: Cart, dish:Dish } = db;
 
 export const getCart = async (req, res) => {
   try {
@@ -44,6 +44,28 @@ export const getCart = async (req, res) => {
     }
   } catch {
     res.status(500).json({ message: error.message });
+  }
+};
+
+export const getCartPrice = async (req, res) => {
+  try {
+    const cart = req.body;
+    let sumTotal = 0;
+
+    if (cart.length === 0) {
+      return res.status(200).json({ total: sumTotal });
+    }
+
+    for (const cartItem of cart) {
+
+        const dish = await Dish.findByPk(cartItem.dishId); 
+          sumTotal += cartItem.quantity * dish.price;
+    }
+
+    return res.status(200).json({ total: sumTotal });
+  } 
+  catch {
+   return res.status(500).json({ message: error.message });
   }
 };
 
