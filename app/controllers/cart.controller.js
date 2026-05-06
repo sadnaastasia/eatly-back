@@ -62,7 +62,7 @@ export const getCartPrice = async (req, res) => {
           sumTotal += cartItem.quantity * dish.price;
     }
 
-    return res.status(200).json({ total: sumTotal });
+    return res.status(200).json({ total: Math.round(sumTotal*100)/100 });
   } 
   catch {
    return res.status(500).json({ message: error.message });
