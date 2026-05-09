@@ -5,26 +5,33 @@ import authConfig from '../config/auth.config.js';
 const { user: User, role: Role } = db;
 
 export const verifyToken = async (req, res, next) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
 
   if (!token) {
     return res.status(403).json({ message: 'No token provided!' });
   }
 
-  try {
-    const decoded = jwt.verify(token, authConfig.access_secret);
-    req.userId = decoded.id;
+ try {
+  const decoded = jwt.verify(token, authConfig.access_secret);
 
-    const user = await User.findByPk(req.userId);
-    if (!user) {
-      return res.status(401).json({ message: 'Unauthorized!' });
-    }
+  req.userId = decoded.id;
+  const user = await User.findByPk(req.userId);
 
-    next();
-  } catch (err) {
-    return res.status(401).json({ message: 'Unauthorized!' });
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' }); 
   }
+
+  next();
+} catch (err) {
+  if (err.name === 'TokenExpiredError') {
+    return res.status(401).json({ message: 'Token expired' });
+  }
+  if (err.name === 'JsonWebTokenError') {
+    return res.status(401).json({ message: 'Invalid token' });
+  }
+  return res.status(500).json({ message: 'Internal server error' });
+}
 };
 
 export const isAdmin = async (req, res, next) => {

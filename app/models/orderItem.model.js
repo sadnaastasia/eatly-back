@@ -1,11 +1,11 @@
 export default (sequelize, Sequelize) => {
-  const CartItem = sequelize.define('cartItem', {
+  const OrderItem = sequelize.define('orderItem', {
     id: {
       type: Sequelize.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
-    cartId: {
+    orderId: {
       type: Sequelize.INTEGER,
       allowNull: false,
     },
@@ -18,8 +18,7 @@ export default (sequelize, Sequelize) => {
       allowNull: false,
       defaultValue: 1,
     },
-    
   });
 
-  return CartItem;
+  return OrderItem;
 };

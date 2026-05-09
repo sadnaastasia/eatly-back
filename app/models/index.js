@@ -6,6 +6,8 @@ import roleModel from './role.model.js';
 import dishModel from './dish.model.js';
 import cartModel from './cart.model.js';
 import cartItemModel from './cartItem.model.js';
+import orderModel from './order.model.js';
+import orderItemModel from './orderItem.model.js';
 
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST,
@@ -25,6 +27,8 @@ db.role = roleModel(sequelize, Sequelize);
 db.dish = dishModel(sequelize, Sequelize);
 db.cart = cartModel(sequelize, Sequelize);
 db.cartItem = cartItemModel(sequelize, Sequelize);
+db.order = orderModel(sequelize, Sequelize);
+db.orderItem = orderItemModel(sequelize, Sequelize);
 
 db.role.belongsToMany(db.user, {
   through: 'user_roles',
@@ -42,6 +46,16 @@ db.cart.hasMany(db.cartItem);
 
 db.cartItem.belongsTo(db.dish);
 db.dish.hasMany(db.cartItem);
+
+
+db.order.belongsTo(db.user);
+db.user.hasOne(db.order);
+
+db.orderItem.belongsTo(db.order);
+db.order.hasMany(db.orderItem);
+
+db.orderItem.belongsTo(db.dish);
+db.dish.hasMany(db.orderItem);
 
 db.ROLES = ['user', 'admin', 'moderator'];
 

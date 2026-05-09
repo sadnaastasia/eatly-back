@@ -5,7 +5,6 @@ export default (sequelize, Sequelize) => {
       primaryKey: true,
       autoIncrement: true,
     },
-
     guestId: {
       type: Sequelize.STRING,
       allowNull: true,
